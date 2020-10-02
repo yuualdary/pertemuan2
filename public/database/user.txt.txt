@@ -1,0 +1,3 @@
+admin = admin@kuda.com pw = adminadmin
+sa = superadmin@super.com pw=supersuper
+mahasiswa = test@test.com pw=secretsecret
