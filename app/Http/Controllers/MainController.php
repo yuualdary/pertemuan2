@@ -44,8 +44,8 @@ class MainController extends Controller
             ->get();
         foreach($user as $u){
             $nama=$u->name;
-            $role=$u->text1;
             // $coba=$request->user()->hasRole($test);
+            $role=$u->text1;
 
         }
         // dd($role)

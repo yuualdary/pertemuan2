@@ -15,13 +15,16 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+
+
 Route::get('/test','MainController@getData');
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Auth::routes();
+// Auth::routes();
 
 // Route::middleware('auth','mainMiddleware')->group(function(){
 

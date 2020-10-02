@@ -7,8 +7,10 @@ use App\masters;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable
+
+class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
 
@@ -21,9 +23,36 @@ class User extends Authenticatable
      * 
      */
 
+
+     
+    // Rest omitted for brevity
+
+    /**
+     * Get the identifier that will be stored in the subject claim of the JWT.
+     *
+     * @return mixed
+     */
+
+    protected $primaryKey ='id';
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+
     public $timestamps = false;
     protected $fillable = [
-        'name', 'email', 'password','role_id','id_created_at','last_login',
+        'name', 'email','role_id','id_created_at','last_login',
     ];
 
     /**
@@ -46,14 +75,25 @@ class User extends Authenticatable
 
     public function masters(){
 
-        return $this->belongsTo(master::class,'role_id','master_id');
+        return $this->belongsTo(master::class,'master_id','role_id');
         
+    }
+
+    public function mahasiswa(){
+
+        return $this->hasOne(mahasiswa::class,'std_created_by','id');
+
     }
 
     private function getUserRole()
     {
         return $this->masters()->getResults();
+
+      
+
+        // return $job;
     }
+
     //cara pertama
     // private function IsRouteMatch($roles)
     // {
@@ -87,12 +127,25 @@ class User extends Authenticatable
     {
         
         
-        $this->hasARole = $this->getUserRole();
+        // $job = $this->getUserRole();
         // $textrole = $this->hasArole->text1;
-        // dd($textrole);
         // $test = $this->hasARole->text1;
         // dd($test);
-        if ($role == $this->hasARole->text1) {
+
+    //   $coba=$this->hasARole->text1;
+
+
+        $text=DB::table('users')
+                ->join('masters','masters.master_id','=','users.role_id')
+                ->where([['users.id','=',auth::user()->id]])
+                ->get();
+        foreach($text as $t){
+        
+        $job=$t->text1;
+        }
+
+        if ($role == $job) {
+
         return true;
         }
             return false;
